@@ -1,16 +1,16 @@
 # chinese_number
-<big><u>**中文文档**</u></big> | <big><u>[English Document](https://github.com/ZingYao/chinese_number/blob/master/README_EN.md)</u></big>
+<big><u>[中文文档](https://github.com/ZingYao/chinese_number/blob/master/README_ZH.md)</u></big> | <big><u>**English Document**</u></big>
 
-### 中文数字和int64 类型互转的工具
-> 数字转中文部分代码思路来自于 [number2hans](https://github.com/joe105598055/number2hans)
-#### 获取方法
-项目根目录下执行命令，获取依赖
+### Tool for converting Chinese numbers to int64 and vice versa Installation
+> The code for converting numbers to Chinese text is inspired by [number2hans](https://github.com/joe105598055/number2hans)
+#### Installation
+Execute the following command in the root directory of your project to get the dependency:
 ```shell
 go get github.com/ZingYao/chinese_number
 ```
 
-#### 使用方法
-1. 中文转数字
+#### Usage
+1. Chinese to numbers
 ```go
 package main
 
@@ -39,8 +39,7 @@ func main() {
 	// output is:str number:"一百九十二亿三千一百一十六万八千九百五十二亿四千零八十六万五千二百一十三" to number is:1923116895240865213
 }
 ```
-2. 数字转中文
-
+2. Numbers to Chinese
 ```go
 package main
 
@@ -57,3 +56,4 @@ func main() {
 	//output is: number:-9223372036854775808 to simplified chinese: "负九百二十二亿三千三百七十二万零三百六十八亿五千四百七十七万五千八百零八"
 }
 ```
+
