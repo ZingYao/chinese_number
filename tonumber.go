@@ -10,7 +10,7 @@ import (
 
 type LangType = int
 
-func chinese2Number(langType LangType, str string) (int64, error) {
+func Chinese2Number(langType LangType, str string) (int64, error) {
 	var zero string
 	var unitArr []string
 	var chineseUnit map[string]int64
@@ -41,7 +41,7 @@ func chinese2Number(langType LangType, str string) (int64, error) {
 		if position := runes.IndexAny(tempNumStr, []rune(unit)); position != -1 {
 			tempStr := string(tempNumStr[:position])
 			tempNumStr = tempNumStr[position+1:]
-			n, err := chinese2Number(langType, tempStr)
+			n, err := Chinese2Number(langType, tempStr)
 			if err != nil {
 				return 0, err
 			}
@@ -68,9 +68,9 @@ func chinese2Number(langType LangType, str string) (int64, error) {
 }
 
 func Simplified2Number(str string) (int64, error) {
-	return chinese2Number(Simplified, str)
+	return Chinese2Number(Simplified, str)
 }
 
 func Traditional2Number(str string) (int64, error) {
-	return chinese2Number(Traditional, str)
+	return Chinese2Number(Traditional, str)
 }
