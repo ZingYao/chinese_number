@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/ZingYao/chinese_number"
 	"math"
+	"os"
+	"sync"
 	"testing"
 )
 
@@ -72,9 +74,9 @@ func TestChinese2NumberUnit(t *testing.T) {
 }
 
 func TestNumber2Chinese(t *testing.T) {
-	num := int64(9090000000000000000)
+	num := int64(math.MinInt64)
 	str := chinese_number.Number2Simplified(num)
-	if str != "九百二十二亿三千三百七十二万零三百六十八亿五千四百七十七万五千八百零七" {
+	if str != "负九百二十二亿三千三百七十二万零三百六十八亿五千四百七十七万五千八百零八" {
 		t.Errorf("result is not correct")
 		t.Fail()
 	} else {
@@ -83,15 +85,32 @@ func TestNumber2Chinese(t *testing.T) {
 }
 
 func TestAllNum(t *testing.T) {
+	index := uint64(0)
+	limit := make(chan int, 64)
+	wg := sync.WaitGroup{}
 	for i := int64(math.MinInt64); i < math.MaxInt64; i++ {
-		str := chinese_number.Number2Simplified(i)
-		num, err := chinese_number.Simplified2Number(str)
-		if err != nil {
-			fmt.Println("err: ", str, i, err)
-			break
-		} else if num != i {
-			fmt.Println("err: ", str, i, num)
-			break
+		index++
+		wg.Add(1)
+		limit <- 1
+		go func(number int64) {
+			defer func() {
+				wg.Done()
+				<-limit
+			}()
+			str := chinese_number.Number2Simplified(number)
+			num, err := chinese_number.Simplified2Number(str)
+			if err != nil {
+				fmt.Println("err: ", str, number, err)
+				os.Exit(-1)
+			} else if num != number {
+				fmt.Println("err: ", str, number, num)
+				os.Exit(-1)
+			}
+		}(i)
+		if index%10000000 == 0 {
+			fmt.Printf("%.010f%%\n", float64(index)/math.MaxInt64*100*2)
 		}
 	}
+	wg.Wait()
+	fmt.Println("done")
 }

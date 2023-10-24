@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func number2Chinese(langType LangType, number int64) string {
+func Number2Chinese(langType LangType, number int64) string {
 	var zero string
 	var toChineseUnitArr, numArr []string
 	var tenThousands string
@@ -59,38 +59,10 @@ func number2Chinese(langType LangType, number int64) string {
 	return str
 }
 
-func isUnit(langType LangType, str string) bool {
-	var unitArr []string
-	switch langType {
-	case Simplified:
-		unitArr = simplified.UnitArr
-	case Traditional:
-		unitArr = traditional.UnitArr
-	}
-	for _, item := range unitArr {
-		if item == str {
-			return true
-		}
-	}
-	return false
-}
-
-func isNumber(langType LangType, str string) bool {
-	var numArr []string
-	switch langType {
-	case Simplified:
-		numArr = simplified.NumArr
-	case Traditional:
-		numArr = traditional.NumArr
-	}
-	for i := 1; i < len(numArr); i++ {
-		if numArr[i] == str {
-			return true
-		}
-	}
-	return false
-}
-
 func Number2Simplified(number int64) string {
-	return number2Chinese(Simplified, number)
+	return Number2Chinese(Simplified, number)
+}
+
+func Number2Traditional(number int64) string {
+	return Number2Chinese(Traditional, number)
 }
