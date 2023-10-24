@@ -8,8 +8,6 @@ import (
 	"strings"
 )
 
-type LangType = int
-
 func Chinese2Number(langType LangType, str string) (int64, error) {
 	var zero string
 	var unitArr []string

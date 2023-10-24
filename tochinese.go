@@ -9,20 +9,21 @@ import (
 )
 
 func Number2Chinese(langType LangType, number int64) string {
-	var zero string
 	var toChineseUnitArr, numArr []string
-	var tenThousands string
+	var tenThousands, tenMillion, zero string
 	switch langType {
 	case Simplified:
 		numArr = simplified.NumArr
 		zero = simplified.Zero
 		toChineseUnitArr = simplified.ToChineseUintArr
 		tenThousands = simplified.TenThousands
+		tenMillion = simplified.TenMillion
 	case Traditional:
 		numArr = traditional.NumArr
 		zero = traditional.Zero
 		toChineseUnitArr = traditional.ToChineseUintArr
 		tenThousands = traditional.TenThousands
+		tenMillion = traditional.TenMillion
 	}
 	if number == 0 {
 		return zero
@@ -45,8 +46,11 @@ func Number2Chinese(langType LangType, number int64) string {
 				chineseNumStrArr = append(chineseNumStrArr, fmt.Sprintf("%s%s", numArr[item-'0'], toChineseUnitArr[arrLen-1-index]))
 			}
 		} else {
-			if toChineseUnitArr[arrLen-1-index] == tenThousands {
+			unit := toChineseUnitArr[arrLen-1-index]
+			if unit == tenThousands {
 				chineseNumStrArr = append(chineseNumStrArr, tenThousands)
+			} else if unit == tenMillion {
+				chineseNumStrArr = append(chineseNumStrArr, tenMillion)
 			} else {
 				isBetweenZero = true
 			}
