@@ -2,7 +2,7 @@
 <big><u>**中文文档**</u></big> | <big><u>[English Document](https://github.com/ZingYao/chinese_number/blob/master/README_EN.md)</u></big>
 
 ### 中文数字和int64 类型互转的工具
-
+> 数字转中文部分代码思路来自于 [number2hans](https://github.com/joe105598055/number2hans)
 #### 获取方法
 项目根目录下执行命令，获取依赖
 ```shell
