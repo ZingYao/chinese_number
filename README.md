@@ -1,5 +1,5 @@
 # chinese_number
-<big><u>[中文文档](https://github.com/ZingYao/chinese_number/blob/master/README_ZH.md)</u></big> | <big><u>**English Document**</u></big>
+<big><u>[中文文档](https://github.com/ZingYao/chinese_number/blob/master/README_CN.md)</u></big> | <big><u>**English Document**</u></big>
 
 ### Tool for converting Chinese numbers to int64 and vice versa Installation
 > The code for converting numbers to Chinese text is inspired by [number2hans](https://github.com/joe105598055/number2hans)
