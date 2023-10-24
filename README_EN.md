@@ -10,7 +10,7 @@ go get github.com/ZingYao/chinese_number
 ```
 
 #### Usage
-
+1. Chinese to numbers
 ```go
 package main
 
@@ -37,5 +37,22 @@ func main() {
 	}
 	fmt.Printf("str number:%q to number is:%d\n",strNum,num)
 	// output is:str number:"一百九十二亿三千一百一十六万八千九百五十二亿四千零八十六万五千二百一十三" to number is:1923116895240865213
+}
+```
+2. Numbers to Chinese
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/ZingYao/chinese_number"
+	"math"
+)
+
+func main() {
+	num := int64(math.MinInt64)
+	str := chinese_number.Number2Simplified(num)
+	fmt.Printf("number:%d to simplified chinese:%q\n",num,str)
+	//output is: number:-9223372036854775808 to simplified chinese: "负九百二十二亿三千三百七十二万零三百六十八亿五千四百七十七万五千八百零八"
 }
 ```
