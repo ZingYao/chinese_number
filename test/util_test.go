@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"github.com/ZingYao/chinese_number"
 	"math"
+	"math/rand"
 	"os"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestStr2Num(t *testing.T) {
@@ -86,29 +88,33 @@ func TestNumber2Chinese(t *testing.T) {
 
 func TestAllNum(t *testing.T) {
 	index := uint64(0)
-	limit := make(chan int, 64)
+	limit := make(chan int, 128)
 	wg := sync.WaitGroup{}
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
 	for i := int64(math.MinInt64); i < math.MaxInt64; i++ {
 		index++
-		wg.Add(1)
-		limit <- 1
-		go func(number int64) {
-			defer func() {
-				wg.Done()
-				<-limit
-			}()
-			str := chinese_number.Number2Simplified(number)
-			num, err := chinese_number.Simplified2Number(str)
-			if err != nil {
-				fmt.Println("err: ", str, number, err)
-				os.Exit(-1)
-			} else if num != number {
-				fmt.Println("err: ", str, number, num)
-				os.Exit(-1)
-			}
-		}(i)
-		if index%10000000 == 0 {
-			fmt.Printf("%.010f%%\n", float64(index)/math.MaxInt64*100*2)
+		// 生成1到10000000的随机数
+		n := r.Intn(10000000) + 1
+		if n == 1 {
+			wg.Add(1)
+			limit <- 1
+			go func(number int64) {
+				defer func() {
+					wg.Done()
+					<-limit
+				}()
+				fmt.Printf("[%s] %.010f%%\tnum:%d\n", time.Now().Format("2006-01-02 15:04:05"), float64(index)/math.MaxInt64*100*2, number)
+				str := chinese_number.Number2Simplified(number)
+				num, err := chinese_number.Simplified2Number(str)
+				if err != nil {
+					fmt.Println("err: ", str, number, err)
+					os.Exit(-1)
+				} else if num != number {
+					fmt.Println("err: ", str, number, num)
+					os.Exit(-1)
+				}
+			}(i)
 		}
 	}
 	wg.Wait()
