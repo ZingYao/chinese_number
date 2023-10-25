@@ -87,35 +87,39 @@ func TestNumber2Chinese(t *testing.T) {
 }
 
 func TestAllNum(t *testing.T) {
+	const thread = 128
 	index := uint64(0)
-	limit := make(chan int, 128)
 	wg := sync.WaitGroup{}
-	source := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(source)
-	for i := int64(math.MinInt64); i < math.MaxInt64; i++ {
-		index++
-		// 生成1到100000000的随机数
-		n := r.Intn(100000000) + 1
-		if n == 1 {
-			wg.Add(1)
-			limit <- 1
-			go func(number int64) {
-				defer func() {
-					wg.Done()
-					<-limit
-				}()
-				fmt.Printf("[%s] %.010f%%\tnum:%d\n", time.Now().Format("2006-01-02 15:04:05"), float64(index)/math.MaxInt64*100*2, number)
-				str := chinese_number.Number2Simplified(number)
+	maxNum := uint64(math.MaxUint64)
+	length := int64(maxNum / 128)
+	for i := int64(1); i <= thread; i++ {
+		wg.Add(1)
+		go func(startNum int64, endNum int64) {
+			defer func() {
+				wg.Done()
+			}()
+			source := rand.NewSource(time.Now().UnixNano())
+			r := rand.New(source)
+			for i := startNum; i < endNum; i++ {
+				index++
+				// 生成1到100000000的随机数
+				n := r.Int63n(100000000) + 1
+				if n != 1 {
+					continue
+				}
+				fmt.Printf("[%s] %.010f%%\tnum:%d\n", time.Now().Format("2006-01-02 15:04:05"), float64(index)/math.MaxInt64*100*2, i)
+				str := chinese_number.Number2Simplified(i)
 				num, err := chinese_number.Simplified2Number(str)
 				if err != nil {
-					fmt.Println("err: ", str, number, err)
+					fmt.Println("err: ", str, i, err)
 					os.Exit(-1)
-				} else if num != number {
-					fmt.Println("err: ", str, number, num)
+				} else if num != i {
+					fmt.Println("err: ", str, i, num)
 					os.Exit(-1)
 				}
-			}(i)
-		}
+			}
+		}(math.MinInt64+length*(i-1), math.MinInt64+i*length)
+		time.Sleep(time.Duration(rand.New(rand.NewSource(time.Now().UnixNano())).Intn(1200)) * time.Millisecond)
 	}
 	wg.Wait()
 	fmt.Println("done")
