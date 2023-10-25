@@ -94,8 +94,8 @@ func TestAllNum(t *testing.T) {
 	r := rand.New(source)
 	for i := int64(math.MinInt64); i < math.MaxInt64; i++ {
 		index++
-		// 生成1到10000000的随机数
-		n := r.Intn(10000000) + 1
+		// 生成1到100000000的随机数
+		n := r.Intn(100000000) + 1
 		if n == 1 {
 			wg.Add(1)
 			limit <- 1
